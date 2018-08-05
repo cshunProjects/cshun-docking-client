@@ -1,0 +1,19 @@
+<template>
+  <v-app>
+    <v-toolbar style="z-index:999;">
+      <v-toolbar-title>产销对接系统</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-toolbar-items>
+        <v-btn flat>登记情况</v-btn>
+        <v-btn flat>申报</v-btn>
+      </v-toolbar-items>
+    </v-toolbar>
+    <nuxt/>
+  </v-app>
+</template>
+
+<style>
+@import "~/style.global.css";
+
+</style>
+
