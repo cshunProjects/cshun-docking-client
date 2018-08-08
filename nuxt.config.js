@@ -38,6 +38,14 @@ module.exports = {
   modules: [
     '@nuxtjs/vuetify',
     '@nuxtjs/axios'
-  ]
+  ],
+  plugins:[
+    {src:"~/plugins/init.js",ssr:false}
+  ],
+  axios:{
+    prefix:"",
+    host:"localhost",
+    port:3001
+  }
 }
 
