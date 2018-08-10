@@ -16,7 +16,8 @@
     "@nuxtjs/axios": "^5.3.1",
     "@nuxtjs/vuetify": "^0.4.2",
     "basscss": "^8.0.4",
-    "nuxt": "^1.0.0"
+    "nuxt": "^1.0.0",
+    "v-charts": "^1.17.9"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.1",
