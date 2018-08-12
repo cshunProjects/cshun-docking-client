@@ -19,6 +19,7 @@
               <v-text-field label="果蔬品种" v-model="record.category" required></v-text-field>
               <v-text-field label="种植面积（亩）" v-model="record.scale" required></v-text-field>
               <v-text-field label="产量（吨）" v-model="record.production" required></v-text-field>
+              <v-text-field label="种植时间" mask="####-##" v-model="record.plantDate" required></v-text-field>
               <v-text-field label="上市起始日期(年-月)" mask="####-##" v-model="record.marketDateBegin" required></v-text-field>
               <v-text-field label="上市终止日期(年-月)" mask="####-##" v-model="record.marketDateEnd" required></v-text-field>
               <v-text-field label="订单销售占比" v-model="record.salesRatio" required></v-text-field>
@@ -41,6 +42,7 @@
         <td class="text-xs-right">{{ props.item.category }}</td>
         <td class="text-xs-right">{{ props.item.scale }}</td>
         <td class="text-xs-right">{{ props.item.production }}</td>
+        <td class="text-xs-right">{{ props.item.plantDate.slice(0,4) + '年' + props.item.plantDate.slice(4,6) +'月' }}</td>
         <td class="text-xs-right">{{ marketDateTransform(props.item.marketDateBegin,props.item.marketDateEnd) }}</td>
         <td class="text-xs-right">{{ props.item.salesRatio }}</td>
         <td class="text-xs-right">{{ props.item.salesRoute }}</td>
@@ -48,7 +50,7 @@
           <v-icon small class="mr-2" @click="showDialog(props.item)">
             edit
           </v-icon>
-          <v-icon small>
+          <v-icon small @click="deleteItem(props.item)">
             delete
           </v-icon>
         </td>
@@ -89,6 +91,7 @@ export default {
         { text: "果蔬品种", value: "category" },
         { text: "种植面积（亩）", value: "scale" },
         { text: "产量（吨）", value: "production" },
+        { text: "种植时间", value: "plantDate" },
         { text: "上市日期", value: "marketDateBegin" },
         { text: "订单销售占比", value: "salesRatio" },
         { text: "销售预警及措施", value: "salesRoute" },
@@ -104,19 +107,30 @@ export default {
   },
   methods: {
     marketDateTransform(begin, end) {
-      console.log(begin,end)
-      return begin.replace("-", "年") + "月 ~ " + end.replace("-", "年") + "月";
+      return (
+        begin.slice(0, 4) +
+        "年" +
+        begin.slice(4, 6) +
+        "月 ~ " +
+        end.slice(0, 4) +
+        "年" +
+        end.slice(4, 6) +
+        "月"
+      );
     },
     showDialogWithMainBody() {
-      const mainBody = this.mainBodies.filter(_ => _.mainBody === this.selectedMainBody)[0];
+      const mainBody = this.mainBodies.filter(
+        _ => _.mainBody === this.selectedMainBody
+      )[0];
       this.record = {
         type: "FruitAndVeg",
         ...mainBody,
-        id:null,
-        creator:mainBody.id
+        id: null,
+        creator: mainBody.id
       };
       this.isDialogOpen = true;
-      this.isChooseMainBodyDialogOpen = false;  
+      this.isChooseMainBodyDialogOpen = false;
+      this.selectedMainBody = "";
     },
     showDialog(data) {
       this.record = { ...data } || {
@@ -129,6 +143,7 @@ export default {
         category: null,
         scale: null,
         production: null,
+        plantDate: null,
         marketDateBegin: null,
         marketDateEnd: null,
         salesRatio: null,
@@ -136,7 +151,10 @@ export default {
       };
       this.isDialogOpen = true;
     },
-    ...mapActions(["createOrUpdateEnrollment"])
+    deleteItem(data) {
+      if (window.confirm("你确定要删除吗？")) this.deleteEnrollment(data);
+    },
+    ...mapActions(["createOrUpdateEnrollment", "deleteEnrollment"])
   }
 };
 </script>

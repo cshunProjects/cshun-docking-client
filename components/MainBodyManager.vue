@@ -37,7 +37,7 @@
           <v-icon small class="mr-2" @click="showDialog(props.item)">
             edit
           </v-icon>
-          <v-icon small>
+          <v-icon small @click="deleteItem(props.item)">
             delete
           </v-icon>
         </td>
@@ -53,10 +53,10 @@ const { mapActions, mapGetters, mapState } = createNamespacedHelpers(
 );
 export default {
   computed: mapState(["mainBodies"]),
-  data(){
+  data() {
     return {
-      headers:[
-         {
+      headers: [
+        {
           text: "序号",
           value: "id"
         },
@@ -64,24 +64,27 @@ export default {
         { text: "经营主体", value: "mainBody" },
         { text: "主体联系人", value: "principal" },
         { text: "联系电话", value: "contacts" },
-        { text: '操作',  sortable: false }
+        { text: "操作", sortable: false }
       ],
-      isDialogOpen:false,
-      record:{}
-    }
+      isDialogOpen: false,
+      record: {}
+    };
   },
-  methods:{
-    showDialog(data){
-      this.record = {...data}  || {
+  methods: {
+    showDialog(data) {
+      this.record = { ...data } || {
         id: null,
         district: null,
         mainBody: null,
         principal: null,
         contacts: null
-      }
-      this.isDialogOpen = true
+      };
+      this.isDialogOpen = true;
     },
-    ...mapActions(["createOrUpdateMainBody"])
+    deleteItem(data) {
+      if (window.confirm("你确定要删除吗？")) this.deleteMainBody(data);
+    },
+    ...mapActions(["createOrUpdateMainBody", "deleteMainBody"])
   }
 };
 </script>

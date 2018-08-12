@@ -50,6 +50,21 @@
             <td class="text-xs-right">{{ props.item.salesRoute }}</td>
           </template>
         </v-data-table>
+        <v-container>
+        <no-ssr>
+          <div>
+            <v-card v-for="(value,key) in itemEachDistrict" :key="key" style="margin-bottom:1em;">
+              <v-card-title primary-title>
+
+            <h3 class="headline mb-0">{{key}}的作物产出情况</h3>
+
+        </v-card-title>
+            <ve-ring  :data="value" />
+            </v-card>
+          </div>
+        <!-- <ve-line :data="chartData"></ve-line> -->
+        </no-ssr>
+        </v-container>
       </v-layout>
     </v-layout>
 
@@ -57,20 +72,30 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from "vuex";
-
+import {VeRing} from "v-charts";
 export default {
-  computed: { ...mapGetters(["enrollment/fruitAndVegEnrollments"]) },
+  components: { VeRing },
+  computed: { ...mapGetters(["enrollment/fruitAndVegEnrollments","enrollment/fruitAndVegEnrollmentAnalytics"]),
+  itemEachDistrict(){
+    console.log(this['enrollment/fruitAndVegEnrollmentAnalytics']['itemEachDistrict']);
+    return this['enrollment/fruitAndVegEnrollmentAnalytics']['itemEachDistrict'];
+  } },
   mounted() {
-    setTimeout(() => {
-      if (!this.$store.getters["auth/isLogin"]) {
-        this.$router.push("/login");
-      } else {
-        this["enrollment/refetchEnrollments"]();
-      }
-    }, 500);
+    this["enrollment/refetchEnrollments"]();
   },
   data() {
     return {
+      chartData: {
+        columns: ["date", "PV"],
+        rows: [
+          { date: "01-01", PV: 1231 },
+          { date: "01-02", PV: 1223 },
+          { date: "01-03", PV: 2123 },
+          { date: "01-04", PV: 4123 },
+          { date: "01-05", PV: 3123 },
+          { date: "01-06", PV: 7123 }
+        ]
+      },
       headers: [
         {
           text: "序号",
